@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, render_template, redirect, url_for, flash
 from flask_cors import CORS
 from datetime import datetime, timedelta
 import os
@@ -122,9 +122,70 @@ def uploaded_file(filename):
 
 from flask import render_template
 
+# Rotas de visualização
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('new_index.html')
+
+@app.route('/login')
+def login_page():
+    return render_template('login.html')
+
+@app.route('/upload')
+@token_required
+def upload_page():
+    return render_template('upload.html')
+
+@app.route('/reports')
+@token_required
+def reports_page():
+    return render_template('reports.html')
+
+@app.route('/cameras')
+@permission_required('manage_cameras')
+def cameras_page(current_user):
+    return render_template('cameras.html')
+
+# API para gerenciamento de câmeras
+@app.route('/api/cameras', methods=['GET', 'POST'])
+@permission_required('manage_cameras')
+def cameras_api(current_user):
+    if request.method == 'GET':
+        return jsonify(list(cameras_db.values()))
+    
+    if request.method == 'POST':
+        data = request.get_json()
+        camera_id = str(uuid.uuid4())
+        cameras_db[camera_id] = {
+            'id': camera_id,
+            'name': data['name'],
+            'rtsp_url': data['rtsp_url'],
+            'location': data['location'],
+            'active': True,
+            'created_at': datetime.utcnow().isoformat()
+        }
+        return jsonify(cameras_db[camera_id]), 201
+
+@app.route('/api/cameras/<camera_id>', methods=['PUT', 'DELETE'])
+@permission_required('manage_cameras')
+def camera_api(current_user, camera_id):
+    if camera_id not in cameras_db:
+        return jsonify({'message': 'Câmera não encontrada'}), 404
+    
+    if request.method == 'PUT':
+        data = request.get_json()
+        cameras_db[camera_id].update(data)
+        return jsonify(cameras_db[camera_id])
+    
+    if request.method == 'DELETE':
+        del cameras_db[camera_id]
+        return jsonify({'message': 'Câmera removida com sucesso'}), 200
+
+# Redirecionar para login após logout
+@app.route('/logout')
+def logout():
+    flash('Você foi desconectado com sucesso', 'info')
+    return redirect(url_for('login_page'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
