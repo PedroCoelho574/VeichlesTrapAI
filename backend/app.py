@@ -120,18 +120,11 @@ def get_analytics():
 def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
+from flask import render_template
+
 @app.route('/')
 def index():
-    return jsonify({
-        'message': 'Bem-vindo ao sistema de detecção de veículos',
-        'api_routes': {
-            'login': '/api/auth/login (POST)',
-            'upload': '/api/detect/upload (POST)',
-            'cameras': '/api/cameras (GET/POST)',
-            'detections': '/api/detections (GET)',
-            'analytics': '/api/analytics (GET)'
-        }
-    }), 200
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
