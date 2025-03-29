@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Monitoramento ISP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .dashboard-card {
+            transition: all 0.3s ease;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .camera-feed {
+            aspect-ratio: 16/9;
+        }
+        .detection-box {
+            position: absolute;
+            border: 2px solid #EF4444;
+            background: rgba(239, 68, 68, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Barra de Navegação -->
+    <nav class="bg-gray-800 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-video text-xl text-red-500"></i>
+                        <span class="ml-2 font-bold">ISP Monitor</span>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#" class="px-3 py-2 rounded-md text-sm font-medium bg-gray-900 text-white">Dashboard</a>
+                        <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Câmeras</a>
+                        <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Relatórios</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Seção de Status -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="dashboard-card bg-white rounded-lg shadow p-6">
+                <h3 class="text-gray-500 text-sm font-medium">Câmeras Ativas</h3>
+                <p class="mt-2 text-3xl font-semibold text-gray-900" id="active-cameras">0</p>
+            </div>
+            <div class="dashboard-card bg-white rounded-lg shadow p-6">
+                <h3 class="text-gray-500 text-sm font-medium">Veículos Detectados</h3>
+                <p class="mt-2 text-3xl font-semibold text-gray-900" id="detected-vehicles">0</p>
+            </div>
+            <div class="dashboard-card bg-white rounded-lg shadow p-6">
+                <h3 class="text-gray-500 text-sm font-medium">Alertas Hoje</h3>
+                <p class="mt-2 text-3xl font-semibold text-gray-900" id="today-alerts">0</p>
+            </div>
+            <div class="dashboard-card bg-white rounded-lg shadow p-6">
+                <h3 class="text-gray-500 text-sm font-medium">Status do Sistema</h3>
+                <p class="mt-2 text-3xl font-semibold text-green-500" id="system-status">Online</p>
+            </div>
+        </div>
+
+        <!-- Seção de Câmeras -->
+        <div class="bg-white shadow rounded-lg p-6 mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-medium text-gray-900">Monitoramento em Tempo Real</h2>
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                    <i class="fas fa-plus mr-2"></i>Adicionar Câmera
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="camera-grid">
+                <!-- Câmeras serão adicionadas dinamicamente aqui -->
+            </div>
+        </div>
+
+        <!-- Seção de Detecções Recentes -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">Detecções Recentes</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Câmera</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Horário</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Imagem</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200" id="detections-table">
+                        <!-- Detecções serão adicionadas dinamicamente aqui -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notificações -->
+    <div id="notifications" class="fixed bottom-4 right-4 space-y-2 w-80 z-50"></div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
