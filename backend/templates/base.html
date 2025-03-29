@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Detecção{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="/" class="flex items-center space-x-2">
+                <i class="fas fa-car-side text-2xl"></i>
+                <span class="text-xl font-bold">VehicleDetect</span>
+            </a>
+            <div class="space-x-4">
+                <a href="/login" class="hover:text-blue-200"><i class="fas fa-sign-in-alt mr-1"></i> Login</a>
+                <a href="/upload" class="hover:text-blue-200"><i class="fas fa-upload mr-1"></i> Upload</a>
+                <a href="/reports" class="hover:text-blue-200"><i class="fas fa-chart-bar mr-1"></i> Relatórios</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo -->
+    <main class="container mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>Sistema de Detecção de Veículos &copy; 2024</p>
+            <p class="text-gray-400 text-sm mt-1">Desenvolvido com Flask, MongoDB e YOLOv8</p>
+        </div>
+    </footer>
+</body>
+</html>
